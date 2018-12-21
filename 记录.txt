@@ -1,0 +1,5 @@
+
+
+http://123.207.190.27:20410/gmtools?{"server_id": 17170433, "handler": "ClubAgtCreateNewClubHandler", "clubName": "ClubµÄ¾ãÀÖ²¿", "agentId": 5024722, "managerId": 5024722, "area":60001}
+
+
