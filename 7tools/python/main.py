@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: UTF-8 -*-
 #生成客户端常用文件快捷打开方式
 import os, sys
@@ -14,7 +14,7 @@ FIND_FILE = ['startgame.bat','lion.py']
 #不想查找的路径
 REMOVE_FILE = ['webpconv',".svn","baseversion"]
 #特别需要的路径
-SPECIAL_FILE = ['D:\\svn\\workspace', "D:\\workTools" , "D:\\Datas" , 'D:\\workTools\\dataParse.py','D:\\workTools\\protoTools.py']
+SPECIAL_FILE = ['D:\\svn\\workspace', "D:\\workTools" , "D:\\Datas" , 'D:\\datas\\7工具\\python\\dataParse.py','D:\\datas\\7,工具\\python\\protoTools.py']
 #置顶的文件
 PROJECT_TOP = ['trunk_quanguo','trunk_chaoshan_0608']
 FILE = 'FILE'
