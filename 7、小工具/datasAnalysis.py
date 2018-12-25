@@ -67,16 +67,14 @@ class Tools(Frame):
 			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
 			fw.close()
 
-		if textFirst != "" and textSecond != "":
+		if textFirst == "" and textSecond == "":
 			fw = open(self.url2, "w") 
 			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
 			fw.close()
 
 	def datasSelect(self):
 		#数据查询与搜索 doing(好像沒必要弄)
-		fw = open(self.url2, "w") 
-		fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
-		fw.close()
+		print "好像沒必要弄"
 		
 	def datasDelete(self):
 		#数据删除 doing
