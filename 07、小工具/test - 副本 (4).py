@@ -15,25 +15,12 @@ class Tools(Frame):
 		self.winfo_toplevel().title("数据存取工具")
 		self.createWidgets()
 
-
-	def refreshLbFirst(self):
-		#刷新列表
-		self.lbFirst.delete(0, END)
-		for d in os.listdir(WORKSPACE_PATH):
-			if os.path.isdir(WORKSPACE_PATH + "\\" + d):
-				self.lbFirst.insert(END,d.decode('gbk'))
-
-
-	def refreshLbSecond(self):
+	def lbFirstClick(self,event):
 		index = self.lbFirst.curselection()
-		if len(index) != 0:
-			self.url1 = u"" + WORKSPACE_PATH + "\\" + self.lbFirst.get(index) 
+		self.url1 = u"" + WORKSPACE_PATH + "\\" + self.lbFirst.get(index) 
 		self.lbSecond.delete(0, END)
 		for d in os.listdir(self.url1):
 			self.lbSecond.insert(END,d)
-
-	def lbFirstClick(self,event):
-		self.refreshLbSecond()
 
 	def lbSecondClick(self,event):
 		index = self.lbSecond.curselection()
@@ -46,6 +33,13 @@ class Tools(Frame):
 				line = line.strip()                          #去掉每行头尾空白  
 				self.content.insert(END,line +"\n")
 			self.content.see(END)
+
+
+	def datasSelect(self):
+		#数据查询与搜索 doing
+		fw = open(self.url2, "w") 
+		fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
+		fw.close()
 
 	def datasAdd(self):
 		#数据添加与更新
@@ -67,17 +61,14 @@ class Tools(Frame):
 			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
 			fw.close()
 
-		if textFirst == "" and textSecond == "":
+		if textFirst != "" and textSecond != "":
 			fw = open(self.url2, "w") 
 			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
 			fw.close()
 
-	def datasSelect(self):
-		#数据查询与搜索 doing(好像沒必要弄)
-		print "好像沒必要弄"
-		
 	def datasDelete(self):
 		#数据删除 doing
+
 		index = self.lbFirst.curselection()
 		index2 = self.lbSecond.curselection()
 		if len(index) != 0:
@@ -92,13 +83,22 @@ class Tools(Frame):
 			if os.path.isfile(filePath):
 				os.remove(filePath)
 				self.url2 == ""
-				self.refreshLbSecond()
+
 
 	def clearText(self):
 		#清空文本
 		self.textFirst.delete(0.0, END)
 		self.textSecond.delete(0.0, END)
 		self.content.delete(0.0, END)
+
+
+	def refreshLbFirst(self):
+		#刷新列表
+		self.lbFirst.delete(0, END)
+		for d in os.listdir(WORKSPACE_PATH):
+			if os.path.isdir(WORKSPACE_PATH + "\\" + d):
+				self.lbFirst.insert(END,d.decode('gbk'))
+
 
 	def createWidgets(self):
 		self.lbFirst = Listbox(self,width = 20,height = 50)
