@@ -11,10 +11,16 @@ class Tools(Frame):
 		Frame.__init__(self)
 		self.url1 = ""
 		self.url2 = ""
+		self.content2 = []
 		self.pack()
 		self.winfo_toplevel().title("数据存取工具")
 		self.createWidgets()
 
+	def clearText(self):
+		#清空文本
+		self.textFirst.delete(0.0, END)
+		self.textSecond.delete(0.0, END)
+		self.content.delete(0.0, END)
 
 	def refreshLbFirst(self):
 		#刷新列表
@@ -28,8 +34,10 @@ class Tools(Frame):
 		if len(index) != 0:
 			self.url1 = u"" + WORKSPACE_PATH + "\\" + self.lbFirst.get(index) 
 		self.lbSecond.delete(0, END)
+		self.content2 = []
 		for d in os.listdir(self.url1):
 			self.lbSecond.insert(END,d)
+			self.content2.append(d)
 
 	def lbFirstClick(self,event):
 		self.refreshLbSecond()
@@ -50,7 +58,6 @@ class Tools(Frame):
 		#数据添加与更新
 		textFirst = self.textFirst.get("0.0", "end").strip()
 		textSecond = self.textSecond.get("0.0", "end").strip()
-
 		dirFirst = u"" + WORKSPACE_PATH + "\\" + textFirst
 
 		if textFirst != "" and os.path.isdir(dirFirst) == False:
@@ -61,20 +68,37 @@ class Tools(Frame):
 			self.url1 = dirFirst
 
 		if textSecond != "" and os.path.isfile(dirFirst) == False:
-			self.url2 = u"" + self.url1 + "\\" + textSecond
+			fileName = str(self.lbSecond.size()) + " " + textSecond + ".md"
+			if self.lbSecond.size() < 10:
+				fileName = "0" + fileName
+
+			self.url2 = u"" + self.url1 + "\\" + fileName
 			fw = open(self.url2, "w") 
 			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
 			fw.close()
 			self.refreshLbSecond()
+			self.textSecond.delete(0.0, END)
+			self.content.delete(0.0, END)
 
 		if textFirst == "" and textSecond == "":
 			fw = open(self.url2, "w") 
 			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
-			fw.close()
+			fw.close()			
 
 	def datasSelect(self):
-		#数据查询与搜索 doing(好像沒必要弄)
-		print "好像沒必要弄"
+		textSecond = self.textSecond.get("0.0", "end").strip()
+		self.lbSecond.delete(0, END)
+
+		if textSecond != "":
+			#文件查询
+			for fileName in self.content2:        # 第二个实例
+				if fileName.find(textSecond) != -1:
+					self.lbSecond.insert(END,fileName)
+		else:
+			for fileName in self.content2: 
+				self.lbSecond.insert(END,fileName)
+
+
 		
 	def datasDelete(self):
 		#数据删除 doing
@@ -94,19 +118,12 @@ class Tools(Frame):
 				self.url2 == ""
 				self.refreshLbSecond()
 
-	def clearText(self):
-		#清空文本
-		self.textFirst.delete(0.0, END)
-		self.textSecond.delete(0.0, END)
-		self.content.delete(0.0, END)
-
 	def createWidgets(self):
 		self.lbFirst = Listbox(self,width = 20,height = 50)
 		self.lbFirst.grid(row = 1, column = 1, sticky="w")
 		self.lbFirst.bind('<Double-Button-1>',self.lbFirstClick)
-		
 		self.refreshLbFirst()
-
+		
 		self.lbSecond = Listbox(self,width = 40,height = 50)
 		self.lbSecond.grid(row = 1, column = 2, sticky="w")
 		self.lbSecond.bind('<Double-Button-1>',self.lbSecondClick)		

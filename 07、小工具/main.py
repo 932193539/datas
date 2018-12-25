@@ -14,7 +14,7 @@ FIND_FILE = ['startgame.bat','lion.py']
 #不想查找的路径
 REMOVE_FILE = ['webpconv',".svn","baseversion"]
 #特别需要的路径
-SPECIAL_FILE = ['D:\\svn\\workspace', "D:\\workTools" , "D:\\Datas" , u'D:\\datas\\7、小工具\\dataParse.py'.encode('gbk'),u'D:\\datas\\7、小工具\\protoTools.py'.encode('gbk'),u'D:\\datas\\7、小工具\\datasAnalysis.py'.encode('gbk')]
+SPECIAL_FILE = ['D:\\svn\\workspace', "D:\\workTools" , "D:\\Datas" , u'D:\\datas\\07、小工具\\dataParse.py'.encode('gbk'),u'D:\\datas\\07、小工具\\protoTools.py'.encode('gbk'),u'D:\\datas\\07、小工具\\datasAnalysis.py'.encode('gbk')]
 #置顶的文件
 PROJECT_TOP = ['trunk_quanguo','trunk_chaoshan_0608']
 FILE = 'FILE'
@@ -26,7 +26,6 @@ client.set_default_username("lixiaoyu")
 client.set_default_password("l!meHill89")
 
 #更新项目
-
 def updateSvn(localPath):
 	revision = None
 	try:
