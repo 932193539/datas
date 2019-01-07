@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import os, sys,pysvn,ctypes
+import os, sys
 from Tkinter import *
 WORKSPACE_PATH = 'D:/svn/workspace'
 LIST_FILE = ['\Client\src\__Message.lua', '\Client\src\__ClickButton.lua' ,'\Client\src\__OpenUI.lua', '\Client\src\__DispatchEvent.lua']

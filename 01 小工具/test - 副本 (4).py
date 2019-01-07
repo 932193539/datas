@@ -4,7 +4,7 @@
 import os, sys,pysvn,ctypes
 
 from Tkinter import *
-WORKSPACE_PATH = u'D:/datas'.encode('gbk')
+WORKSPACE_PATH = u'C:\workspace\datas'.encode('gbk')
 
 class Tools(Frame):
 	def __init__(self):

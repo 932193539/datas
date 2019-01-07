@@ -3,8 +3,8 @@
 import os, sys,pysvn,ctypes
 
 from Tkinter import *
-WORKSPACE_PATH = u'D:/datas'.encode('gbk')
-WORKSPACE_PATH_NAME = 'D:/datas'
+WORKSPACE_PATH = u'C:\workspace\datas'.encode('gbk')
+WORKSPACE_PATH_NAME = 'C:\workspace\datas'
 LIST_FILE = ['\Client\src\__Message.lua', '\Client\src\__ClickButton.lua' ,'\Client\src\__OpenUI.lua', '\Client\src\__DispatchEvent.lua']
 
 class Tools(Frame):
@@ -16,13 +16,17 @@ class Tools(Frame):
 		self.winfo_toplevel().title("游戏数据解析工具")
 		self.createWidgets()
 
+	def openfile(self,fileID):
 
-
-
-
-	def test222(self,event):
 		index2 = self.test.curselection()
-		if len(index2) != 0:
+
+		if len(index2) == 0:
+			index = self.lb.curselection()
+			self.url1 = u"" + WORKSPACE_PATH + "\\" + self.lb.get(index) 
+			self.test.delete(0, END)
+			for d in os.listdir(self.url1):
+				self.test.insert(END,d)
+		else:
 			#有值就取
 			temp = u"" + self.url1 + "\\" + self.test.get(index2) 
 			print(temp)
@@ -33,18 +37,11 @@ class Tools(Frame):
 				self.content.insert(END,line +"\n")
 			self.content.see(END)
 
-	def printlist(self,event):
-		index = self.lb.curselection()
-		self.url1 = u"" + WORKSPACE_PATH + "\\" + self.lb.get(index) 
-		self.test.delete(0, END)
-		for d in os.listdir(self.url1):
-			self.test.insert(END,d)
 
 	def createWidgets(self):
 
 		self.lb = Listbox(self,width = 50,height = 50)
 		self.lb.grid(row = 1, column = 1, sticky="w")
-		self.lb.bind('<Double-Button-1>',self.printlist)
 		
 		for d in os.listdir(WORKSPACE_PATH):
 			if os.path.isdir(WORKSPACE_PATH + "\\" + d):
@@ -59,15 +56,15 @@ class Tools(Frame):
 
 		self.test = Listbox(self,width = 50,height = 50)
 		self.test.grid(row = 1, column = 2, sticky="w")
-		self.test.bind('<Double-Button-1>',self.test222)		
+		
 
-		self.content = Text(self,width = 100, height = 69)
+		self.content = Text(self,width = 50, height = 50)
 		self.content.grid(row = 1, column = 3, sticky="w")
 
-		#self.frm = Frame(self,width = 100, height = 1)
-		#self.frm.grid(row = 2, column = 1, sticky="w")
+		self.frm = Frame(self,width = 100, height = 1)
+		self.frm.grid(row = 2, column = 1, sticky="w")
 
-		#self.clickButton = Button(self.frm,width = 24, text="Message", command=self.openfile).grid(row = 3, column = 1)
+		self.clickButton = Button(self.frm,width = 24, text="Message", command=lambda fileID=0 : self.openfile(fileID)).grid(row = 3, column = 1)
 
 if __name__ == '__main__':
 	tools = Tools()

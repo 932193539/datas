@@ -1,14 +1,15 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 # 数据存取工具
-import os, sys,pysvn,ctypes
+import os, sys
 
 from Tkinter import *
-WORKSPACE_PATH = u'D:/datas'.encode('gbk')
+WORKSPACE_PATH = u'C:\workspace\datas'.encode('gbk')
 
 class Tools(Frame):
 	def __init__(self):
 		Frame.__init__(self)
+		#存入地址名
 		self.url1 = ""
 		self.url2 = ""
 		self.content2 = []
@@ -61,10 +62,17 @@ class Tools(Frame):
 		dirFirst = u"" + WORKSPACE_PATH + "\\" + textFirst
 
 		if textFirst != "" and os.path.isdir(dirFirst) == False:
+
+			fileName = str(self.lbFirst.size()) + " " + textFirst
+			if self.lbFirst.size() < 10:
+				fileName = "0" + fileName
+
+				
 			#填写的一级目录不为空,且不存在则创建它
 			os.chdir(r'' + WORKSPACE_PATH)
-			os.mkdir(textFirst)
+			os.mkdir(fileName)
 			self.refreshLbFirst()
+			self.textFirst.delete(0.0, END)
 			self.url1 = dirFirst
 
 		if textSecond != "" and os.path.isfile(dirFirst) == False:
@@ -98,8 +106,6 @@ class Tools(Frame):
 			for fileName in self.content2: 
 				self.lbSecond.insert(END,fileName)
 
-
-		
 	def datasDelete(self):
 		#数据删除 doing
 		index = self.lbFirst.curselection()
@@ -118,17 +124,47 @@ class Tools(Frame):
 				self.url2 == ""
 				self.refreshLbSecond()
 
+	def openFile(self):
+		if os.path.isdir(self.url1):
+			os.startfile(self.url1)
+
+	def fileTopMove(self,paramNum):
+		index = self.lbFirst.curselection()
+		index2 = self.lbSecond.curselection()
+		fileName = ""
+		url = ""
+		
+		if len(index2) != 0:
+			fileName = self.lbSecond.get(index2) 
+			url = self.url1
+		elif len(index) != 0:
+			fileName = self.lbFirst.get(index) 
+			url = r"" + WORKSPACE_PATH
+
+		fileId = int(fileName[0:2])
+		for d in os.listdir(url):
+			if d != "README.md" and d != ".git" :
+				print(int(d[0:2]) - paramNum)
+				if fileId == int(d[0:2]) - paramNum:
+					#改名字
+					os.rename(url + "\\" + d,url + "\\" + d.replace(str(fileId + paramNum), str(fileId), 1))
+					os.rename(url + "\\" + fileName,url + "\\" + fileName.replace(str(fileId), str(fileId + paramNum), 1))
+					break;
+
+		self.refreshLbFirst()
+		self.refreshLbSecond()
+
 	def createWidgets(self):
-		self.lbFirst = Listbox(self,width = 20,height = 50)
+		self.lbFirst = Listbox(self,width = 20,height = 40)
 		self.lbFirst.grid(row = 1, column = 1, sticky="w")
 		self.lbFirst.bind('<Double-Button-1>',self.lbFirstClick)
 		self.refreshLbFirst()
 		
-		self.lbSecond = Listbox(self,width = 40,height = 50)
+		self.lbSecond = Listbox(self,width = 40,height = 40)
 		self.lbSecond.grid(row = 1, column = 2, sticky="w")
 		self.lbSecond.bind('<Double-Button-1>',self.lbSecondClick)		
 
-		self.content = Text(self,width = 100, height = 69)
+		self.content = Text(self,width = 100, height = 45,font = '32')
 		self.content.grid(row = 1, column = 3, sticky="w")
 
 		self.textFirst = Text(self,width = 20, height = 1)
@@ -141,14 +177,21 @@ class Tools(Frame):
 		self.frm = Frame(self,width = 100, height = 1)
 		self.frm.grid(row = 2, column = 3)
 
-		self.datasAdd = Button(self.frm,width = 24, text="添加修改", command=self.datasAdd)
+		self.datasAdd = Button(self.frm,width = 18, text="添加修改", command=self.datasAdd)
 		self.datasAdd.grid(row = 1, column = 1)
-		self.datasSelect = Button(self.frm, width = 24,text="数据查询", command=self.datasSelect)
+		self.datasSelect = Button(self.frm, width = 18,text="数据查询", command=self.datasSelect)
 		self.datasSelect.grid(row = 1, column = 2)
-		self.datasDelete = Button(self.frm,width = 24, text="数据删除", command=self.datasDelete)
+		self.datasDelete = Button(self.frm,width = 18, text="数据删除", command=self.datasDelete)
 		self.datasDelete.grid(row = 1, column = 3)
-		self.clearText = Button(self.frm,width = 24, text="清空文本", command=self.clearText)
+		self.clearText = Button(self.frm,width = 18, text="清空文本", command=self.clearText)
 		self.clearText.grid(row = 1, column = 4)
+		self.clearText = Button(self.frm,width = 18, text="打开文件", command=self.openFile)
+		self.clearText.grid(row = 1, column = 5)
+
+		self.clearText = Button(self.frm,width = 5, text="上移", command=lambda : self.fileTopMove(-1))
+		self.clearText.grid(row = 1, column = 6)
+		self.clearText = Button(self.frm,width = 5, text="下移", command=lambda : self.fileTopMove(1))
+		self.clearText.grid(row = 1, column = 7)
 
 if __name__ == '__main__':
 	tools = Tools()
