@@ -1,0 +1,73 @@
+//计算给定的数组大小
+template<class T>
+int lengthFun(T& arr)
+{
+    return sizeof(arr) / sizeof(arr[0]);
+}
+
+//入口函数
+int main()
+{
+	//这里我都添加了随机的参数以保证自测准确便捷(题干给定数据,都是可以在规定条件下随意添加或修改的)
+	//k是本金，length 数组长度,arr二维矩阵数组
+	int k = 6;
+	int arr[] = {7,3,9,4,7,1,9,5,2,6};
+	int length = lengthFun(arr);
+
+	//记录每天买股票可能的最大利润
+	int *arrMaxMoney  = (int *)malloc(sizeof(arr));;
+	//记录最大利润
+	int maxMoney = 0;
+
+	//双层循环计算并记录,每一天购买后再哪一天卖出会获得最大利润（当天买的是无法在当天之前卖出的）
+	for (int i = 0; i < len; i++)
+	{
+		for (int j = i+1; j < len; j++)
+		{
+			if(arr[j] - arr[i] > maxMoney)
+				//取利润最大的那一天
+				maxMoney = arr[j] - arr[i];
+		}
+		//记录当天购买在日后可获取的最大利润,重置最大利润
+		arrMaxMoney[i] = maxMoney;
+		maxMoney = 0;
+	}
+	
+	//数据重置
+	maxMoney = 0;
+
+	//两层循环判断哪两天购买会获得最大利润
+	for (int i = 0; i < length; i++)
+	{
+		for (int j = i + 1; j < length; j++)
+		{
+			//满足本金且利润比之前记录的大，则重新记录最大利润
+			if ( arr[i] + arr[j] <= k && arrMaxMoney[i] + arrMaxMoney[j] > maxMoney)
+				maxMoney = arrMaxMoney[i] + arrMaxMoney[j];
+		}
+	}
+
+	if(maxMoney == 0){
+		//我的钱做不了两笔生意,现在尝试只做一笔
+		for (int i = 0; i < length; i++)
+		{
+			//满足本金且利润比之前记录的大，则重新记录最大利润
+			if (arr[i] <= k && maxMoney < arrMaxMoney[i])
+				maxMoney = arrMaxMoney[i];
+		}
+	}
+	
+	cout <<maxMoney;
+}
+
+
+时间复杂度(更加计算规则 只保留最高次项，同时忽略最高项的系数)
+为 T(n) = (n - 1) + (n - 2) + (n - 3)... (n - n) 
+		= ((n - 1) + 0 * n) / 2
+		= n2 / 2 - n / 2
+		= O(n2/2) (n2的平方)
+空间复杂度为 (递归的时间复杂度算法，可以把每次递归单独计算然后累加到一起)
+T(n) = O(1)
+
+
+

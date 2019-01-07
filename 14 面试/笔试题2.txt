@@ -1,0 +1,136 @@
+//通过递归计算岛大小
+template<class T>
+int getIslandSize(T& arr,int rowId, int colId , int length)
+{
+	int count = 0;
+	if(arr[rowId][colId] == 0)
+	{
+		//该位置属于该岛一部分,该岛大小+1,并且通过1标记该位置(防止重复记录)
+		count ++;
+		arr[rowId][colId] = 1;
+	}else
+		return 0;
+
+	//以下是判断该位置相邻位置是否也属于该岛的一部分，如果属于且没有被记录的,则进行递归记录该岛面积中
+	if (rowId - 1 > 0 && arr[rowId-1][colId] == 0)
+	{
+		count = count + getIslandSize(arr,rowId-1,colId,length);
+	}
+
+	if (rowId + 1 < length && arr[rowId+1][colId] == 0)
+	{
+		count = count + getIslandSize(arr,rowId+1,colId,length);
+	}
+
+	if (colId - 1 > 0 && arr[rowId][colId-1] == 0)
+	{
+		count = count + getIslandSize(arr,rowId,colId-1,length);
+	}
+
+	if (colId + 1 < length && arr[rowId][colId+1] == 0)
+	{
+		count = count + getIslandSize(arr,rowId,colId+1,length);
+	}
+
+	//最后通过递归记录了该点所在小岛的总面积，且小岛全部位置被标记，不会再被标记到其他小岛中
+	return count;
+}
+
+
+//入口函数
+int main()
+{
+	//这里我都添加了随机的参数以保证自测准确便捷(题干给定数据,都是可以在规定条件下随意添加或修改的)
+	//length 数组长度,arr二维矩阵数组
+	int length = 6;
+	int arr[6][6] = {{1,1,1,1,1,1},{1,1,0,0,0,1},{1,0,0,0,1,0},{1,1,0,1,1,1},{0,1,0,1,0,0},{1,1,1,1,1,1}};
+	//用2个数组row ，和col数组，每个只有2个记录值分别记录边界值。（也就是记录行(列)最左侧(右)的一个内陆1的索引值）
+	int row[6][2];
+	int col[6][2];
+	//结果数组，把视做小岛的记为0,把已标记的小岛记为1,非小岛的为-1
+	int resultArr[6][6];
+
+	memset(resultArr,-1,sizeof(resultArr));
+	memset(row,-1,sizeof(row));
+	memset(col,-1,sizeof(col));
+
+	//双层循环获取边界值
+	for ( int i = 0 ; i < length ; i ++ )
+	{
+		for ( int j = 0 ; j < length ; j ++ )
+		{
+			if ( arr[i][j] == 1 )
+			{
+				//记录边界值
+				if (row[i][0] == -1)
+					//如果有值则该值为边界值，其他的值都没有它小
+					row[i][0] = j;
+				if (col[j][0] == -1)
+					col[j][0] = i;
+				row[i][1] = j;
+				col[j][1] = i;
+			}
+		}
+	}
+
+	//双层循环记录小岛数据
+	for ( int i = 0 ; i < length ; i++ )
+	{
+		for ( int j = 0 ; j < length ; j ++ )
+		{
+			if ( arr[i][j] == 0 && j > row[i][0] && j < row[i][1] && i > col[j][0] && i < col[j][1])
+			{
+				//它上下左右都存在1,是岛的一部分记录它
+				resultArr[i][j] = 0;
+			}
+		}	
+	}
+ 
+	//根据题意求第二个岛大小,则我们记录前两个大岛的大小就可以了
+	int firstCount = 0;
+	int secondCount = 0;
+	//临时值
+	int tempCount = 0;
+	
+	//双层循环记录小岛大小
+	for (int i = 0; i < length; i++)
+	{
+		for (int j = 0; j < length; j++)
+		{
+			if(arr[i][j] == 0)
+			{
+				//这属于一个小岛的一部分(我们之前用0标记做小岛)，计算该岛大小
+				tempCount = getIslandSize(resultArr,i,j,length);
+				if(tempCount > firstCount)
+				{
+					//大于第一大岛,重新赋值一大岛、二大岛
+					secondCount = firstCount;
+					firstCount = tempCount;
+				}else if(tempCount > secondCount)
+					//大于第二大岛,重新赋值二岛
+					secondCount = tempCount;
+				//小岛面积清零
+				tempCount = 0;
+			}
+		}
+	}
+
+	if(secondCount != 0)
+		//有第二个岛,则直接输出
+		cout <<secondCount;
+	else
+		//根据题意"输入矩阵中包含的小岛K >= 1",则假设一定存在一个岛的输出唯一的岛
+		cout <<firstCount;
+}
+
+
+
+
+时间复杂度(更加计算规则 只保留最高次项，同时忽略最高项的系数)
+为 T(n) = O(n2) (n的平方) 
+空间复杂度为 (递归的时间复杂度算法，可以把每次递归单独计算然后累加到一起)
+T(n) = O(1) + O(1) + O(1) + O(1) + O(1) + O(1) + O(1)
+	 = O(n)
+
+
+
