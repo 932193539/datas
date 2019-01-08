@@ -51,8 +51,9 @@ class Tools(Frame):
 			fo = open(r'' + self.url2, "r")
 			self.content.delete(0.0, END)
 			for line in fo.readlines():                          #依次读取每行  
-				line = line.strip()                          #去掉每行头尾空白  
-				self.content.insert(END,line +"\n")
+				print(line)
+				#line = line.strip()                          #去掉每行头尾空白  
+				self.content.insert(END,line)
 			self.content.see(END)
 
 	def datasAdd(self):
@@ -82,7 +83,7 @@ class Tools(Frame):
 
 			self.url2 = u"" + self.url1 + "\\" + fileName
 			fw = open(self.url2, "w") 
-			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
+			fw.write(self.content.get("0.0", "end").encode('utf-8'))
 			fw.close()
 			self.refreshLbSecond()
 			self.textSecond.delete(0.0, END)
@@ -90,7 +91,7 @@ class Tools(Frame):
 
 		if textFirst == "" and textSecond == "":
 			fw = open(self.url2, "w") 
-			fw.write(self.content.get("0.0", "end").strip().encode('utf-8'))
+			fw.write(self.content.get("0.0", "end").encode('utf-8'))
 			fw.close()			
 
 	def datasSelect(self):
