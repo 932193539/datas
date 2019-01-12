@@ -51,7 +51,6 @@ class Tools(Frame):
 			fo = open(r'' + self.url2, "r")
 			self.content.delete(0.0, END)
 			for line in fo.readlines():                          #依次读取每行  
-				print(line)
 				#line = line.strip()                          #去掉每行头尾空白  
 				self.content.insert(END,line)
 			self.content.see(END)
