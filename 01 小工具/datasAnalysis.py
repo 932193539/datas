@@ -4,7 +4,7 @@
 import os, sys
 
 from Tkinter import *
-WORKSPACE_PATH = u'C:\workspace\datas'.encode('gbk')
+WORKSPACE_PATH = u'/Users/admin/Documents/workspace/datas/'.encode('gbk')
 
 class Tools(Frame):
 	def __init__(self):
@@ -27,13 +27,13 @@ class Tools(Frame):
 		#刷新列表
 		self.lbFirst.delete(0, END)
 		for d in os.listdir(WORKSPACE_PATH):
-			if os.path.isdir(WORKSPACE_PATH + "\\" + d):
-				self.lbFirst.insert(END,d.decode('gbk'))
+			if os.path.isdir(WORKSPACE_PATH + "/" + d):
+				self.lbFirst.insert(END,d)
 
 	def refreshLbSecond(self):
 		index = self.lbFirst.curselection()
 		if len(index) != 0:
-			self.url1 = u"" + WORKSPACE_PATH + "\\" + self.lbFirst.get(index) 
+			self.url1 = u"" + WORKSPACE_PATH + "/" + self.lbFirst.get(index) 
 		self.lbSecond.delete(0, END)
 		self.content2 = []
 		for d in os.listdir(self.url1):
@@ -47,7 +47,7 @@ class Tools(Frame):
 		index = self.lbSecond.curselection()
 		if len(index) != 0:
 			#有值就取
-			self.url2 = u"" + self.url1 + "\\" + self.lbSecond.get(index) 
+			self.url2 = u"" + self.url1 + "/" + self.lbSecond.get(index) 
 			fo = open(r'' + self.url2, "r")
 			self.content.delete(0.0, END)
 			for line in fo.readlines():                          #依次读取每行  
@@ -59,7 +59,7 @@ class Tools(Frame):
 		#数据添加与更新
 		textFirst = self.textFirst.get("0.0", "end").strip()
 		textSecond = self.textSecond.get("0.0", "end").strip()
-		dirFirst = u"" + WORKSPACE_PATH + "\\" + textFirst
+		dirFirst = u"" + WORKSPACE_PATH + "/" + textFirst
 
 		if textFirst != "" and os.path.isdir(dirFirst) == False:
 
@@ -80,7 +80,7 @@ class Tools(Frame):
 			if self.lbSecond.size() < 10:
 				fileName = "0" + fileName
 
-			self.url2 = u"" + self.url1 + "\\" + fileName
+			self.url2 = u"" + self.url1 + "/" + fileName
 			fw = open(self.url2, "w") 
 			fw.write(self.content.get("0.0", "end").encode('utf-8'))
 			fw.close()
@@ -111,14 +111,14 @@ class Tools(Frame):
 		index = self.lbFirst.curselection()
 		index2 = self.lbSecond.curselection()
 		if len(index) != 0:
-			dirPath = u"" + WORKSPACE_PATH + "\\" + self.lbFirst.get(index) 
+			dirPath = u"" + WORKSPACE_PATH + "/" + self.lbFirst.get(index) 
 			if os.path.isdir(dirPath):
 				os.rmdir(dirPath)
 				self.url1 == ""
 				self.url2 == ""
 				self.refreshLbFirst()
 		elif len(index2) != 0:
-			filePath = u"" + self.url1 + "\\" + self.lbSecond.get(index2) 
+			filePath = u"" + self.url1 + "/" + self.lbSecond.get(index2) 
 			if os.path.isfile(filePath):
 				os.remove(filePath)
 				self.url2 == ""
@@ -146,8 +146,8 @@ class Tools(Frame):
 			if d != "README.md" and d != ".git" :
 				if fileId == int(d[0:2]) - paramNum:
 					#改名字
-					os.rename(url + "\\" + d,url + "\\" + d.replace(str(fileId + paramNum), str(fileId), 1))
-					os.rename(url + "\\" + fileName,url + "\\" + fileName.replace(str(fileId), str(fileId + paramNum), 1))
+					os.rename(url + "/" + d,url + "/" + d.replace(str(fileId + paramNum), str(fileId), 1))
+					os.rename(url + "/" + fileName,url + "/" + fileName.replace(str(fileId), str(fileId + paramNum), 1))
 					break;
 
 		self.refreshLbFirst()
@@ -163,7 +163,7 @@ class Tools(Frame):
 		self.lbSecond.grid(row = 1, column = 2, sticky="w")
 		self.lbSecond.bind('<Double-Button-1>',self.lbSecondClick)		
 
-		self.content = Text(self,width = 100, height = 45,font = '32')
+		self.content = Text(self,width = 100, height = 40,font = '32')
 		self.content.grid(row = 1, column = 3, sticky="w")
 
 		self.textFirst = Text(self,width = 20, height = 1)
@@ -171,6 +171,7 @@ class Tools(Frame):
 
 		self.textSecond = Text(self,width = 40, height = 1)
 		self.textSecond.grid(row = 2, column = 2)
+
 
 
 		self.frm = Frame(self,width = 100, height = 1)
